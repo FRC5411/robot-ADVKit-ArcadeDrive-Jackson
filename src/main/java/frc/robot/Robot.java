@@ -31,15 +31,30 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.  
+    // autonomous chooser on the dashboard. 
+    Logger logger = Logger.getInstance();
+    
     m_robotContainer = new RobotContainer();  
     
-    Logger.getInstance().recordMetadata("Project name", "ArcadeDrive w/ ADV Scope"); 
+    logger.recordMetadata("Title", "ArcadeDrive w/ ADV Scope");  
+    logger.recordMetadata("Project Name",BuildConstants.PROJECTNAME);  
+    logger.recordMetadata("Build Date", BuildConstants.BUILDDATE); 
+    logger.recordMetadata("GitSha",BuildConstants.GITSHA);  
+    logger.recordMetadata("GitDate",BuildConstants.GITDATE);  
+    logger.recordMetadata("GitBranch",BuildConstants.GITBRANCH);  
+    switch (BuildConstants.DIRTY){ 
+      case 1:   
+         logger.recordMetadata("GitDirty", "Uncommitted Changes!"); 
+      case 0: 
+         logger.recordMetadata("GitDirty","All changes are committed!"); 
+      default: 
+         logger.recordMetadata("GitDirty","Unknown state");
+    } 
+    
+    logger.addDataReceiver(new WPILOGWriter(".wpilog"));  
+    logger.addDataReceiver(new NT4Publisher()); 
 
-    Logger.getInstance().addDataReceiver(new WPILOGWriter(".wpilog"));  
-    Logger.getInstance().addDataReceiver(new NT4Publisher()); 
-
-    Logger.getInstance().start(); 
+    logger.start(); 
 
   }
 
